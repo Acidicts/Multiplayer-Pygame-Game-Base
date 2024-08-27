@@ -24,22 +24,19 @@ pygame.display.set_caption("Pygame Multiplayer")
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((HOST, PORT))
 
-
 class Player:
     def __init__(self, x, y, color):
         self.x = x
         self.y = y
         self.color = color
 
-
 # List to store other players' data
 other_players = []
-
 
 def receive():
     while True:
         try:
-            data = client.recv(1024)
+            data = client.recv(4096)  # Increased buffer size
             if not data:
                 break
             other_players_data = pickle.loads(data)
@@ -48,7 +45,6 @@ def receive():
         except Exception as e:
             print(f"Error receiving data: {str(e)}")
             break
-
 
 def main():
     clock = pygame.time.Clock()
@@ -79,15 +75,14 @@ def main():
         client.sendall(pickle.dumps(move_data))
 
         screen.fill(WHITE)
+        pygame.draw.rect(screen, local_player.color, (local_player.x, local_player.y, 50, 50))
         for player in other_players:
             pygame.draw.rect(screen, player.color, (player.x, player.y, 50, 50))
-        pygame.draw.rect(screen, local_player.color, (local_player.x, local_player.y, 50, 50))
 
         pygame.display.flip()
         clock.tick(60)
 
     pygame.quit()
-
 
 if __name__ == "__main__":
     main()

@@ -15,13 +15,11 @@ server.listen()
 clients = []
 players = []
 
-
 class Player:
     def __init__(self, x, y, color):
         self.x = x
         self.y = y
         self.color = color
-
 
 def handle_client(client, addr):
     print(f"New connection from {addr}")
@@ -49,7 +47,6 @@ def handle_client(client, addr):
             print(f"Error handling client {addr}: {str(e)}")
             break
 
-
 def main():
     print(f"Server listening on {HOST}:{PORT}")
 
@@ -57,7 +54,6 @@ def main():
         client, addr = server.accept()
         client_thread = threading.Thread(target=handle_client, args=(client, addr))
         client_thread.start()
-
 
 if __name__ == "__main__":
     main()
